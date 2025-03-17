@@ -3,8 +3,8 @@ import Stripe from 'stripe';
 
 // Initialize Stripe with your secret key
 // For security, use environment variables in production
-const STRIPE_SECRET_KEY = 'sk_test_51R0Ep3IiRzaHtU7d6E2u78vKForCf3L4AJRnsrxbOBzsmqIk49pErktkaPB8fKZu6hTGRrGdFtefJ6UsF3ZJc6Hf00hhmx9Aji';
-const STRIPE_WEBHOOK_SECRET = 'whsec_your_webhook_secret'; // Replace with your webhook signing secret
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 
 export async function POST(request: NextRequest) {
   try {

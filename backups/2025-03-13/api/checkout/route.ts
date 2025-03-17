@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 // Stripe configuration
-const STRIPE_SECRET_KEY = 'sk_test_51R0Ep3IiRzaHtU7d6E2u78vKForCf3L4AJRnsrxbOBzsmqIk49pErktkaPB8fKZu6hTGRrGdFtefJ6UsF3ZJc6Hf00hhmx9Aji';
-const STRIPE_PRICE_ID = 'price_1R12LKIiRzaHtU7dIw7tTRZx';
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
+const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || '';
 
 // Email validation helper function
 function isValidEmail(email: string): boolean {
