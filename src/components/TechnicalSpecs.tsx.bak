@@ -1,0 +1,167 @@
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+
+export default function TechnicalSpecs() {
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  return (
+    <motion.div 
+      className="mb-24"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={fadeIn}
+    >
+      <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+        Technical 
+        <span className="text-lime-400 ml-2">Specifications</span>
+      </h2>
+
+      <p className="text-white/60 text-center mb-8 max-w-3xl mx-auto">
+        These are the planned specifications for our product currently in development
+      </p>
+
+      <div className="bg-[#111111] rounded-3xl border border-[#222222] p-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* AI Model Specs */}
+          <div>
+            <h3 className="text-xl font-bold text-lime-400 mb-4">Planned AI Model Architecture</h3>
+            <ul className="space-y-3">
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Base Algorithm:</span>
+                  <p className="text-white/70 text-sm">Hybrid LSTM Neural Network + Random Forest ensemble</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Prediction Window:</span>
+                  <p className="text-white/70 text-sm">30 minutes in advance of hypoglycemic crisis</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Data Processing:</span>
+                  <p className="text-white/70 text-sm">On-device preprocessing with cloud-based inference</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Training Dataset:</span>
+                  <p className="text-white/70 text-sm">14,500+ voice samples for model development</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Target Accuracy:</span>
+                  <p className="text-white/70 text-sm">85% in our ongoing clinical validation</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Voice Analysis Technology */}
+          <div>
+            <h3 className="text-xl font-bold text-lime-400 mb-4">Voice Biomarker Analysis</h3>
+            <ul className="space-y-3">
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Acoustic Features:</span>
+                  <p className="text-white/70 text-sm">Jitter, shimmer, harmonics-to-noise ratio, formant frequencies</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Baseline Calibration:</span>
+                  <p className="text-white/70 text-sm">Individual acoustic profile to be created after 7 days of daily samples</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Biomarker Set:</span>
+                  <p className="text-white/70 text-sm">37 proprietary vocal biomarkers specifically correlated with hypoglycemia</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Recording Design:</span>
+                  <p className="text-white/70 text-sm">10-second morning sample (recommended) + on-demand recording</p>
+                </div>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-lime-400 font-bold">•</span>
+                <div>
+                  <span className="font-medium">Research Basis:</span>
+                  <p className="text-white/70 text-sm">Based on peer-reviewed studies from Johns Hopkins and Mayo Clinic</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Integration and Alert System */}
+        <div className="mt-8 pt-8 border-t border-zinc-800">
+          <h3 className="text-xl font-bold text-lime-400 mb-4">Planned Integration & Alert System</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <h4 className="font-medium mb-2">Planned CGM Compatibility</h4>
+              <ul className="space-y-1">
+                <li className="text-white/70 text-sm">• Dexcom G6 & G7</li>
+                <li className="text-white/70 text-sm">• FreeStyle Libre 2 & 3</li>
+                <li className="text-white/70 text-sm">• Medtronic Guardian</li>
+                <li className="text-white/70 text-sm">• Eversense</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Alert System Design</h4>
+              <ul className="space-y-1">
+                <li className="text-white/70 text-sm">• Tier 1: User-only alert (30-min)</li>
+                <li className="text-white/70 text-sm">• Tier 2: Emergency contacts (10-min)</li>
+                <li className="text-white/70 text-sm">• Tier 3: Auto-EMS alert with GPS (optional)</li>
+                <li className="text-white/70 text-sm">• Sleep Safety Mode with pillow vibration</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Data Security Framework</h4>
+              <ul className="space-y-1">
+                <li className="text-white/70 text-sm">• HIPAA & GDPR Compliant</li>
+                <li className="text-white/70 text-sm">• AES-256 encryption</li>
+                <li className="text-white/70 text-sm">• User-owned data policy</li>
+                <li className="text-white/70 text-sm">• Zero-knowledge voice storage</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Citation */}
+        <div className="mt-8 pt-6 border-t border-zinc-800 text-center">
+          <p className="text-white/40 text-xs">
+            * Technical specifications are based on our research and planned features.
+            The final product may vary as we continue development and testing.
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}

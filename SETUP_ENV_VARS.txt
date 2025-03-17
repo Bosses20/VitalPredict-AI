@@ -1,0 +1,29 @@
+# Stripe Integration - API Key Configuration
+
+This document outlines how to set up environment variables for Stripe integration.
+
+## Current Configuration
+
+The Stripe API keys have been directly configured in the codebase:
+
+1. `src/app/api/checkout/route.ts` - Used for creating checkout sessions
+2. `src/app/api/webhooks/stripe/route.ts` - Used for verifying webhook signatures
+
+## Setting Up Environment Variables
+
+To properly secure your API keys, follow these steps:
+
+1. Create a `.env.local` file in the project root
+2. Update the code to use `process.env.STRIPE_SECRET_KEY` instead of the hardcoded value
+3. Set up the webhook secret when configuring webhooks in Stripe
+
+## Example `.env.local` File
+
+```
+# Stripe API Keys
+STRIPE_PUBLISHABLE_KEY=pk_test_51R0Ep3IiRzaHtU7dBPJzL5PHIMiRnwa5EgBtNvPAxBFAaEpt6OhjdbQIdWqqENvnyvBGhub8ndPXoLvMSq5Iopvu006tjIII0F
+STRIPE_SECRET_KEY=sk_test_51R0Ep3IiRzaHtU7d6E2u78vKForCf3L4AJRnsrxbOBzsmqIk49pErktkaPB8fKZu6hTGRrGdFtefJ6UsF3ZJc6Hf00hhmx9Aji
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# Product Configuration
+STRIPE_PRICE_ID=price_1R12LKIiRzaHtU7dIw7tTRZx

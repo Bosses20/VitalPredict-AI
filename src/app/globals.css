@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add scroll margin to sections to account for fixed navbar */
+section[id] {
+  scroll-margin-top: 100px;
+}
+
+/* Fix mobile viewport height issues for iOS */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Fix default focus outline for modals and menus */
+button:focus, a:focus {
+  outline: 2px solid rgb(163 230 53 / 0.5);
+  outline-offset: 2px;
+}
+
+/* Fix overflow issues */
+.overflow-x-hidden {
+  max-width: 100vw;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% / 2));
+  }
+}
+
+@keyframes logo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% / 2));
+  }
+}
+
+.stats-scroll {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  margin: 4rem 0;
+  overflow: hidden;
+}
+
+.stats-scroll-inner {
+  display: flex;
+  width: fit-content;
+  animation: scroll 15s linear infinite;
+  will-change: transform;
+}
+
+.stats-scroll-inner:hover {
+  animation-play-state: paused;
+}
+
+.animate-scroll {
+  animation: logo-scroll 20s linear infinite;
+  will-change: transform;
+}
+
+@media (min-width: 768px) {
+  .stats-scroll {
+    margin: 0;
+    overflow: visible;
+  }
+  .stats-scroll-inner {
+    animation: none;
+    width: auto;
+  }
+}
