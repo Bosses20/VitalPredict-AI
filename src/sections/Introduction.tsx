@@ -2,7 +2,7 @@
 
 import Tag from "../components/Tag";
 import { useRef, useState, useEffect } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useAnimation } from "framer-motion";
 
 // Statistics data
 const stats = [
@@ -32,6 +32,7 @@ export default function Introduction() {
     const statsScrollRef = useRef<HTMLDivElement>(null);
     const [activeStatIndex, setActiveStatIndex] = useState(0);
     const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
+    const statsControls = useAnimation();
     
     // Create scroll-linked animations
     const { scrollYProgress } = useScroll({
@@ -58,75 +59,78 @@ export default function Introduction() {
     useEffect(() => {
         if (!statsScrollRef.current || !isStatsInView || !autoScrollEnabled) return;
         
-        // Calculate width of a single card plus gap
-        const cardWidth = 280 + 16; // card width (280px) + gap (16px)
-        let intervalId: NodeJS.Timeout;
+        // Setup continuous animation for automatic scrolling
+        const cardWidth = 280 + 16; // card width + gap
+        const totalWidth = cardWidth * stats.length;
         
-        // Function to scroll to the next card
-        const scrollToNextCard = () => {
-            if (!statsScrollRef.current) return;
-            
-            const nextIndex = (activeStatIndex + 1) % stats.length;
-            setActiveStatIndex(nextIndex);
-            
-            // Smooth scroll to the next card
-            statsScrollRef.current.scrollTo({
-                left: nextIndex * cardWidth,
-                behavior: 'smooth'
-            });
-        };
-        
-        // Auto-scroll every 4 seconds
-        intervalId = setInterval(scrollToNextCard, 4000);
-        
-        // Setup intersection observer to detect which card is in view
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const index = Number(entry.target.getAttribute('data-index'));
-                        setActiveStatIndex(index);
-                    }
-                });
-            },
-            {
-                root: statsScrollRef.current,
-                threshold: 0.7
+        // Create infinite loop animation
+        statsControls.start({
+            x: [-cardWidth, -(totalWidth + cardWidth)],
+            transition: {
+                x: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 15,
+                    ease: "linear",
+                }
             }
-        );
+        });
         
-        // Get all card elements and observe them
-        const cards = statsScrollRef.current.querySelectorAll('.stat-card');
-        cards.forEach(card => observer.observe(card));
-        
-        // Handle manual scroll
-        const handleManualScroll = () => {
+        // Function to update active index based on scroll position
+        const updateActiveIndex = () => {
             if (!statsScrollRef.current) return;
+            const scrollLeft = statsScrollRef.current.scrollLeft;
+            const newIndex = Math.round(scrollLeft / cardWidth) % stats.length;
             
-            // Clear the auto-scroll interval when user manually scrolls
-            clearInterval(intervalId);
-            
-            // Restart auto-scroll after 3 seconds of user inactivity
-            setTimeout(() => {
-                intervalId = setInterval(scrollToNextCard, 4000);
-            }, 3000);
+            if (newIndex !== activeStatIndex && newIndex >= 0 && newIndex < stats.length) {
+                setActiveStatIndex(newIndex);
+            }
         };
         
-        statsScrollRef.current.addEventListener('touchstart', handleManualScroll);
-        statsScrollRef.current.addEventListener('mousedown', handleManualScroll);
+        // Handle manual scroll interactions
+        const handleManualInteraction = () => {
+            // Pause animation when user interacts
+            statsControls.stop();
+            updateActiveIndex();
+            
+            // Resume animation after user inactivity
+            const resumeTimeout = setTimeout(() => {
+                if (autoScrollEnabled) {
+                    statsControls.start({
+                        x: [-cardWidth, -(totalWidth + cardWidth)],
+                        transition: {
+                            x: {
+                                repeat: Infinity,
+                                repeatType: "loop",
+                                duration: 15,
+                                ease: "linear",
+                            }
+                        }
+                    });
+                }
+            }, 3000);
+            
+            return resumeTimeout;
+        };
+        
+        // Attach event listeners
+        statsScrollRef.current.addEventListener('touchstart', handleManualInteraction);
+        statsScrollRef.current.addEventListener('mousedown', handleManualInteraction);
+        statsScrollRef.current.addEventListener('scroll', updateActiveIndex);
+        
+        let resumeTimeout: NodeJS.Timeout;
         
         return () => {
-            clearInterval(intervalId);
+            statsControls.stop();
+            clearTimeout(resumeTimeout);
             
             if (statsScrollRef.current) {
-                statsScrollRef.current.removeEventListener('touchstart', handleManualScroll);
-                statsScrollRef.current.removeEventListener('mousedown', handleManualScroll);
+                statsScrollRef.current.removeEventListener('touchstart', handleManualInteraction);
+                statsScrollRef.current.removeEventListener('mousedown', handleManualInteraction);
+                statsScrollRef.current.removeEventListener('scroll', updateActiveIndex);
             }
-            
-            // Disconnect observer
-            observer.disconnect();
         };
-    }, [isStatsInView, autoScrollEnabled, activeStatIndex, stats.length]);
+    }, [isStatsInView, autoScrollEnabled, activeStatIndex, stats.length, statsControls]);
     
     return (
         <section className="py-28 relative overflow-hidden" ref={sectionRef}>
@@ -239,7 +243,10 @@ export default function Introduction() {
                     {/* Mobile stats with swipe support */}
                     <div className="md:hidden mt-8">
                         <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide smooth-scroll" ref={statsScrollRef}>
-                            <div className="flex flex-nowrap gap-4 w-full">
+                            <motion.div 
+                                className="flex flex-nowrap gap-4 w-full"
+                                animate={statsControls}
+                            >
                                 {stats.map((stat, index) => (
                                     <motion.div 
                                         key={`stat-mobile-${index}`}
@@ -290,7 +297,7 @@ export default function Introduction() {
                                         </div>
                                     </motion.div>
                                 ))}
-                            </div>
+                            </motion.div>
                             
                             {/* Scroll indicator */}
                             <div className="flex justify-center mt-4">

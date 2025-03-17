@@ -126,7 +126,7 @@ export default function PreSaleOffer() {
     
     // Get email from localStorage
     const getUserEmail = useCallback(() => {
-        return localStorage.getItem('userEmail') || 'test@example.com';
+        return localStorage.getItem('userEmail') || '';
     }, []);
 
     if (!endTime) return null;
