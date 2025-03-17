@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://vitalpredict.ai';
+  const baseUrl = 'https://vitalpredict.dev';
   
   // Define the main routes of the site
   const routes = [

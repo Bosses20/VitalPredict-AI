@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/*', '/admin/*'],
     },
-    sitemap: 'https://vitalpredict.ai/sitemap.xml',
+    sitemap: 'https://vitalpredict.dev/sitemap.xml',
   };
 }
