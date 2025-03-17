@@ -186,16 +186,30 @@ export default function WaitlistForm({ onClose, className = '', source = 'waitli
               transition={{ duration: 0.3 }}
               className="bg-white/5 border border-white/10 rounded-lg p-3"
             >
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-1 gap-3">
                 {['Hypoglycemia Prediction', 'Voice Biomarkers', 'Early Access', 'Clinical Research'].map((interest) => (
-                  <label key={interest} className="flex items-center space-x-2 text-white">
-                    <input
-                      type="checkbox"
-                      value={interest}
-                      {...register('interests')}
-                      className="w-4 h-4 bg-white/10 border-white/30 rounded focus:ring-blue-500"
-                    />
-                    <span>{interest}</span>
+                  <label key={interest} className="flex items-center space-x-3 text-white cursor-pointer">
+                    <div className="relative flex items-center">
+                      <input
+                        type="checkbox"
+                        value={interest}
+                        {...register('interests')}
+                        className="sr-only peer"
+                      />
+                      <div className="w-5 h-5 md:w-4 md:h-4 border border-white/30 rounded bg-white/5 peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-colors"></div>
+                      <svg 
+                        className="absolute w-3 h-3 text-white left-1 top-1 opacity-0 peer-checked:opacity-100 pointer-events-none" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="3" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <span className="text-sm md:text-base">{interest}</span>
                   </label>
                 ))}
               </div>
