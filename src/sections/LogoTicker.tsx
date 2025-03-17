@@ -4,7 +4,7 @@ import dexcomLogo from "@/assets/images/dexcom.svg";
 import libreViewLogo from "@/assets/images/libreview.svg";
 import johnsHopkinsLogo from "@/assets/images/Johns_Hopkins.svg";
 import mayoclinicLogo from "@/assets/images/mayo_clinic.svg";
-import HIPAALogo from "@/assets/images/HIPAA.svg";
+import HIPAALogo from "@/assets/images/hipaa.svg";
 import GDPRLogo from "@/assets/images/GDPR.svg";
 import Image from "next/image";
 import { motion, useAnimation, useTransform, useScroll } from "framer-motion";
