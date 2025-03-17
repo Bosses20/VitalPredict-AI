@@ -1,7 +1,7 @@
 "use client";
 
 import Tag from "../components/Tag";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 // Statistics data
@@ -29,11 +29,14 @@ export default function Introduction() {
     const titleRef = useRef<HTMLDivElement>(null);
     const problemsRef = useRef<HTMLDivElement>(null);
     const statsRef = useRef<HTMLDivElement>(null);
+    const statsScrollRef = useRef<HTMLDivElement>(null);
+    const [activeStatIndex, setActiveStatIndex] = useState(0);
+    const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
     
     // Create scroll-linked animations
     const { scrollYProgress } = useScroll({
         target: sectionRef,
-        offset: ["start end", "end start"]
+        offset: ["start end", "end start"],
     });
     
     // Different elements will have different parallax effects
@@ -47,6 +50,83 @@ export default function Introduction() {
     const isTitleInView = useInView(titleRef, { once: true, amount: 0.5 });
     const isProblemsInView = useInView(problemsRef, { once: true, amount: 0.3 });
     const isStatsInView = useInView(statsRef, { once: true, amount: 0.3 });
+    
+    // For parallax scrolling effect
+    const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+    
+    // Auto-scrolling carousel for mobile stats
+    useEffect(() => {
+        if (!statsScrollRef.current || !isStatsInView || !autoScrollEnabled) return;
+        
+        // Calculate width of a single card plus gap
+        const cardWidth = 280 + 16; // card width (280px) + gap (16px)
+        let intervalId: NodeJS.Timeout;
+        
+        // Function to scroll to the next card
+        const scrollToNextCard = () => {
+            if (!statsScrollRef.current) return;
+            
+            const nextIndex = (activeStatIndex + 1) % stats.length;
+            setActiveStatIndex(nextIndex);
+            
+            // Smooth scroll to the next card
+            statsScrollRef.current.scrollTo({
+                left: nextIndex * cardWidth,
+                behavior: 'smooth'
+            });
+        };
+        
+        // Auto-scroll every 4 seconds
+        intervalId = setInterval(scrollToNextCard, 4000);
+        
+        // Setup intersection observer to detect which card is in view
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Number(entry.target.getAttribute('data-index'));
+                        setActiveStatIndex(index);
+                    }
+                });
+            },
+            {
+                root: statsScrollRef.current,
+                threshold: 0.7
+            }
+        );
+        
+        // Get all card elements and observe them
+        const cards = statsScrollRef.current.querySelectorAll('.stat-card');
+        cards.forEach(card => observer.observe(card));
+        
+        // Handle manual scroll
+        const handleManualScroll = () => {
+            if (!statsScrollRef.current) return;
+            
+            // Clear the auto-scroll interval when user manually scrolls
+            clearInterval(intervalId);
+            
+            // Restart auto-scroll after 3 seconds of user inactivity
+            setTimeout(() => {
+                intervalId = setInterval(scrollToNextCard, 4000);
+            }, 3000);
+        };
+        
+        statsScrollRef.current.addEventListener('touchstart', handleManualScroll);
+        statsScrollRef.current.addEventListener('mousedown', handleManualScroll);
+        
+        return () => {
+            clearInterval(intervalId);
+            
+            if (statsScrollRef.current) {
+                statsScrollRef.current.removeEventListener('touchstart', handleManualScroll);
+                statsScrollRef.current.removeEventListener('mousedown', handleManualScroll);
+            }
+            
+            // Disconnect observer
+            observer.disconnect();
+        };
+    }, [isStatsInView, autoScrollEnabled, activeStatIndex, stats.length]);
     
     return (
         <section className="py-28 relative overflow-hidden" ref={sectionRef}>
@@ -158,12 +238,12 @@ export default function Introduction() {
                     
                     {/* Mobile stats with swipe support */}
                     <div className="md:hidden mt-8">
-                        <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide smooth-scroll">
+                        <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide smooth-scroll" ref={statsScrollRef}>
                             <div className="flex flex-nowrap gap-4 w-full">
                                 {stats.map((stat, index) => (
                                     <motion.div 
                                         key={`stat-mobile-${index}`}
-                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-5 min-w-[280px] max-w-[280px] flex-shrink-0 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5 scroll-snap-card"
+                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-5 min-w-[280px] max-w-[280px] flex-shrink-0 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5 scroll-snap-card stat-card" data-index={index}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={isStatsInView ? { opacity: 1, scale: 1 } : {}}
                                         transition={{ 
@@ -218,10 +298,29 @@ export default function Introduction() {
                                     {stats.map((_, index) => (
                                         <div 
                                             key={`indicator-${index}`} 
-                                            className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-lime-400' : 'bg-white/20'}`}
+                                            className={`w-2 h-2 rounded-full cursor-pointer transition-colors duration-300 ${index === activeStatIndex ? 'bg-lime-400' : 'bg-white/20'}`}
+                                            onClick={() => {
+                                                // Manual navigation
+                                                if (!statsScrollRef.current) return;
+                                                setActiveStatIndex(index);
+                                                const cardWidth = 280 + 16; // card width + gap
+                                                statsScrollRef.current.scrollTo({
+                                                    left: index * cardWidth,
+                                                    behavior: 'smooth'
+                                                });
+                                            }}
                                         />
                                     ))}
                                 </div>
+                                
+                                {/* Auto-scroll toggle */}
+                                <button 
+                                    className="ml-4 flex items-center justify-center w-6 h-6 rounded-full bg-zinc-800 border border-white/10 text-xs"
+                                    onClick={() => setAutoScrollEnabled(!autoScrollEnabled)}
+                                    aria-label={autoScrollEnabled ? "Pause auto-scroll" : "Enable auto-scroll"}
+                                >
+                                    {autoScrollEnabled ? "∥" : "▶"}
+                                </button>
                             </div>
                         </div>
                     </div>
