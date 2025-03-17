@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "DISABLE_ESLINT_PLUGIN=true next build",
-    "build:win": "set \"DISABLE_ESLINT_PLUGIN=true\" && set \"SKIP_TYPESCRIPT_CHECK=true\" && next build",
+    "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -43,6 +42,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "null-loader": "^4.0.1",
