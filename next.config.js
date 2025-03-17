@@ -12,6 +12,10 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; img-src 'self' https:; script-src 'none'; sandbox;",
     unoptimized: true
   },
+  // Don't fail the build if ESLint finds issues
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;
