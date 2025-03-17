@@ -214,7 +214,7 @@ export default function Hero() {
                 <div className="relative z-10">
                     <div className="flex justify-center mb-6">
                         <motion.div 
-                            className="inline-flex py-1 px-3 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full text-neutral-950 font-semibold"
+                            className="inline-flex py-1 px-3 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full text-neutral-950 font-semibold text-sm md:text-base"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ 
@@ -227,7 +227,7 @@ export default function Hero() {
                         </motion.div>
                     </div>
 
-                    <div className="text-6xl md:text-7xl font-medium text-center mt-6">
+                    <div className="text-4xl md:text-6xl lg:text-7xl font-medium text-center mt-6 px-4 md:px-6">
                         <BlurText
                             text="Stop Living in Fear of Hypoglycemia Emergencies."
                             delay={100}
@@ -251,7 +251,7 @@ export default function Hero() {
                     </div>
 
                     <motion.p
-                        className="text-center text-xl text-white/50 mt-8 max-w-2xl mx-auto"
+                        className="text-center text-lg md:text-xl text-white/50 mt-6 md:mt-8 max-w-2xl mx-auto px-4 md:px-6"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ 
@@ -265,7 +265,7 @@ export default function Hero() {
                     </motion.p>
 
                     <motion.form
-                        className="flex border border-white/15 rounded-full p-2 mt-8 max-w-lg mx-auto"
+                        className="flex flex-col sm:flex-row border border-white/15 rounded-full p-2 mt-6 md:mt-8 max-w-lg mx-auto sm:px-2 px-4"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ 
@@ -279,14 +279,14 @@ export default function Hero() {
                         <input 
                             type="email" 
                             placeholder="Enter your email" 
-                            className="bg-transparent px-4 md:flex-1 w-full outline-none" 
+                            className="bg-transparent px-4 w-full outline-none mb-2 sm:mb-0" 
                             disabled={isSubmitting}
                             {...register("email")}
                         />
                         <Button 
                             type="submit" 
                             variant="primary" 
-                            className="whitespace-nowrap"
+                            className="whitespace-nowrap w-full sm:w-auto"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? "Submitting..." : "Sign Up"}

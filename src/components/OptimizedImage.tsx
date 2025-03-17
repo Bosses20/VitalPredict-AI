@@ -8,6 +8,8 @@ type OptimizedImageProps = {
   threshold?: number;
   rootMargin?: string;
   onLoad?: () => void;
+  mobileSizes?: string;
+  desktopSizes?: string;
 } & Omit<ImageProps, 'onLoad'>;
 
 export default function OptimizedImage({
@@ -15,6 +17,8 @@ export default function OptimizedImage({
   threshold = 0.1,
   rootMargin = '200px 0px',
   onLoad,
+  mobileSizes = '100vw',
+  desktopSizes = '50vw',
   ...props
 }: OptimizedImageProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -53,45 +57,44 @@ export default function OptimizedImage({
         observer.unobserve(currentRef);
       }
     };
-  }, [priority, rootMargin, threshold]);
+  }, [priority, threshold, rootMargin]);
+  
+  // Calculate responsive sizes based on screen size
+  const sizes = `(max-width: 768px) ${mobileSizes}, ${desktopSizes}`;
   
   // Handle image load completion
-  const handleLoad = () => {
+  const handleImageLoad = () => {
     setIsLoaded(true);
     if (onLoad) onLoad();
+    
+    // Track image load performance
+    if (window.performance && props.src) {
+      const resourceName = typeof props.src === 'string' ? props.src : 'image-load';
+      const loadTime = window.performance.now();
+      
+      // You could send this to your analytics if needed
+      console.log(`Image loaded: ${resourceName} in ${Math.round(loadTime)}ms`);
+    }
   };
-
+  
   return (
-    <div ref={imgRef} className="relative">
-      {(priority || isVisible) ? (
-        <>
-          <Image
-            {...props}
-            priority={priority}
-            onLoad={handleLoad}
-            style={{
-              ...props.style,
-              opacity: isLoaded ? 1 : 0,
-              transition: 'opacity 0.3s ease-in-out',
-            }}
-          />
-          {!isLoaded && (
-            <div 
-              className="absolute inset-0 bg-gradient-to-r from-zinc-900/10 to-zinc-800/10 animate-pulse"
-              style={{
-                width: props.width,
-                height: props.height,
-              }}
-            />
-          )}
-        </>
-      ) : (
-        <div 
-          className="bg-neutral-800/50"
-          style={{
-            width: props.width,
-            height: props.height,
-          }}
+    <div 
+      ref={imgRef} 
+      className={`relative overflow-hidden ${props.className || ''}`}
+      style={{ 
+        aspectRatio: props.width && props.height ? `${props.width} / ${props.height}` : 'auto',
+        ...props.style 
+      }}
+    >
+      {(isVisible || priority) && (
+        <Image
+          {...props}
+          className={`transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${props.className || ''}`}
+          onLoad={handleImageLoad}
+          loading={priority ? 'eager' : 'lazy'}
+          sizes={sizes}
+          // Add fetchPriority for better LCP
+          fetchPriority={priority ? 'high' : 'auto'}
         />
       )}
     </div>

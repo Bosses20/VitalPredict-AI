@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     authors: [{ name: "VitalPredict AI Team" }],
     creator: "VitalPredict AI",
     publisher: "VitalPredict AI",
-    metadataBase: new URL('https://vitalpredict.ai'),
+    metadataBase: new URL('https://vitalpredict.dev'),
     openGraph: {
         title: "VitalPredict AI | Predicting Hypoglycemia Before It Happens",
         description: "AI-powered glucose prediction for diabetic patients. Prevent hypoglycemic events before they happen with voice biomarker technology.",
@@ -85,9 +85,15 @@ export const metadata: Metadata = {
       google: 'google-site-verification-code', // Replace with actual verification code when available
     },
     alternates: {
-      canonical: 'https://vitalpredict.ai',
+      canonical: 'https://vitalpredict.dev',
     },
     applicationName: 'VitalPredict AI',
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 5,
+      userScalable: true,
+    },
 };
 
 export default function RootLayout({
@@ -99,12 +105,10 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-                <meta name="theme-color" content="#000000" />
-                <link rel="canonical" href="https://vitalpredict.ai" />
+                <meta name="theme-color" content="#111827" />
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=true" />
             </head>
-            <body
-                className={`${inter.variable} font-sans antialiased bg-neutral-950 text-white`}
-            >
+            <body className={`${inter.variable} font-sans bg-neutral-950 text-white antialiased overflow-x-hidden`}>
                 <AnalyticsProvider>
                     {children}
                 </AnalyticsProvider>
