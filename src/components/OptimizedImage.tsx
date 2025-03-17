@@ -60,7 +60,7 @@ export default function OptimizedImage({
   }, [priority, threshold, rootMargin]);
   
   // Calculate responsive sizes based on screen size
-  const sizes = `(max-width: 768px) ${mobileSizes}, ${desktopSizes}`;
+  const sizes = `(max-width: 48rem) ${mobileSizes}, ${desktopSizes}`;
   
   // Handle image load completion
   const handleImageLoad = () => {
