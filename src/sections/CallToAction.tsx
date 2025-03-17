@@ -2,6 +2,7 @@
 
 import { motion, useAnimate, AnimationPlaybackControls } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import * as analytics from '@/lib/analytics';
 
 export default function CallToAction() {
     const animation = useRef<AnimationPlaybackControls>();
@@ -41,6 +42,13 @@ export default function CallToAction() {
         
         try {
             setIsLoading(true);
+            
+            // Track the checkout click event
+            analytics.trackEvent('checkout_initiated', {
+                source: 'emergency_cta',
+                location: 'call_to_action_section'
+            });
+            
             // Call the checkout API endpoint
             const response = await fetch('/api/checkout', {
                 method: 'POST',
@@ -50,7 +58,8 @@ export default function CallToAction() {
                 body: JSON.stringify({
                     name: 'Emergency Protection User',
                     customData: {
-                        source: 'emergency_cta'
+                        source: 'emergency_cta',
+                        timestamp: new Date().toISOString()
                     }
                 }),
             });
@@ -66,6 +75,12 @@ export default function CallToAction() {
         } catch (error) {
             console.error('Error starting checkout:', error);
             alert('Sorry, there was a problem starting the checkout process. Please try again.');
+            
+            // Track the error
+            analytics.trackError('checkout_error', {
+                source: 'emergency_cta',
+                error: error instanceof Error ? error.message : 'Unknown error'
+            });
         } finally {
             setIsLoading(false);
         }
