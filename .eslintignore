@@ -1,0 +1,9 @@
+# Ignore problematic files
+src/sections/PreSaleOffer.tsx
+src/sections/WhatPeopleAreSaying.tsx
+
+# Ignore these directories
+node_modules/
+.next/
+out/
+build/
