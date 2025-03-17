@@ -104,3 +104,53 @@ body {
     width: auto;
   }
 }
+
+/* Improve touch scrolling */
+@media (max-width: 768px) {
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .scroll-snap-card {
+    scroll-snap-align: center;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  html, body {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  
+  input, button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Fix for iOS 100vh issue */
+  .h-screen {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Fix 100vh issues on mobile */
+.mobile-height-fix {
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: -moz-available;
+  height: stretch;
+}

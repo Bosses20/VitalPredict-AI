@@ -138,26 +138,39 @@ export default function Introduction() {
                 </div>
                 
                 {/* Stats Cards */}
-                <div className="stats-scroll relative w-full mt-16" ref={statsRef}>
-                    {/* Mobile stats with horizontal scroll */}
-                    <div className="md:hidden">
-                        <div className="stats-scroll-inner">
-                            <div className="inline-flex gap-6">
+                <div className="stats-section relative w-full mt-4 md:mt-16" ref={statsRef}>
+                    {/* Problem statement */}
+                    <div className="text-center mb-8 md:mb-12">
+                        <motion.div 
+                            className="flex items-center justify-center gap-2 mb-3"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={isTitleInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <span className="text-red-500">✕</span> 
+                            <span className="text-white/80">Families live </span>
+                            <span className="text-teal-400 font-semibold">in</span>
+                            <span className="text-white/80"> constant fear </span>
+                            <span className="text-teal-400 font-semibold">of</span>
+                            <span className="text-white/80"> sudden collapses.</span>
+                        </motion.div>
+                    </div>
+                    
+                    {/* Mobile stats with swipe support */}
+                    <div className="md:hidden mt-8">
+                        <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide smooth-scroll">
+                            <div className="flex flex-nowrap gap-4 w-full">
                                 {stats.map((stat, index) => (
                                     <motion.div 
-                                        key={`stat-mobile-1-${index}`}
-                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-8 w-80 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5"
+                                        key={`stat-mobile-${index}`}
+                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-5 min-w-[280px] max-w-[280px] flex-shrink-0 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5 scroll-snap-card"
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={isStatsInView ? { opacity: 1, scale: 1 } : {}}
                                         transition={{ 
                                             duration: 0.5, 
-                                            delay: index * 0.2,
+                                            delay: 0.3 + index * 0.2,
                                             type: "spring",
                                             stiffness: 100
-                                        }}
-                                        whileHover={{ 
-                                            y: -8, 
-                                            transition: { duration: 0.3 }
                                         }}
                                     >
                                         <div className="flex flex-col gap-1">
@@ -198,31 +211,17 @@ export default function Introduction() {
                                     </motion.div>
                                 ))}
                             </div>
-                            <div className="inline-flex gap-6">
-                                {stats.map((stat, index) => (
-                                    <motion.div 
-                                        key={`stat-mobile-2-${index}`}
-                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-8 w-80 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5"
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={isStatsInView ? { opacity: 1, scale: 1 } : {}}
-                                        transition={{ 
-                                            duration: 0.5, 
-                                            delay: 0.3 + index * 0.2,
-                                            type: "spring",
-                                            stiffness: 100
-                                        }}
-                                        whileHover={{ 
-                                            y: -8, 
-                                            transition: { duration: 0.3 }
-                                        }}
-                                    >
-                                        <div className="flex flex-col gap-1">
-                                            <div className="text-5xl font-bold text-lime-400 font-mono tracking-tight">{stat.value}</div>
-                                            <div className="text-xl font-medium bg-gradient-to-r from-white to-white/90 text-transparent bg-clip-text whitespace-normal">{stat.title}</div>
-                                            <div className="text-sm text-white/50 leading-relaxed whitespace-normal">{stat.description}</div>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                            
+                            {/* Scroll indicator */}
+                            <div className="flex justify-center mt-4">
+                                <div className="flex gap-1.5">
+                                    {stats.map((_, index) => (
+                                        <div 
+                                            key={`indicator-${index}`} 
+                                            className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-lime-400' : 'bg-white/20'}`}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
