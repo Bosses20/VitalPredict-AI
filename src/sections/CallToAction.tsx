@@ -8,6 +8,8 @@ export default function CallToAction() {
     const [scope, animate] = useAnimate();
     const [isHovered, setIsHovered] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
 
     useEffect(() => {
         const el = scope.current;
@@ -39,8 +41,15 @@ export default function CallToAction() {
     const handleCheckoutClick = async () => {
         if (isLoading) return;
         
+        // Validate email
+        if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            setEmailError('Please enter a valid email address');
+            return;
+        }
+        
         try {
             setIsLoading(true);
+            setEmailError('');
             // Call the checkout API endpoint
             const response = await fetch('/api/checkout', {
                 method: 'POST',
@@ -49,7 +58,7 @@ export default function CallToAction() {
                 },
                 body: JSON.stringify({
                     name: 'Emergency Protection User',
-                    email: 'user@example.com',  // Use a dummy email that passes validation
+                    email,
                 }),
             });
 
@@ -92,6 +101,28 @@ export default function CallToAction() {
                                 <span className="text-4xl md:text-5xl text-lime-400 font-medium">
                                     {isLoading ? 'Loading Checkout...' : 'Get Protected Now-Before It\'s Too Late'}
                                 </span>
+                                <div className="mt-6 flex flex-col md:flex-row gap-3 max-w-md mx-auto">
+                                    <div className="flex-1">
+                                        <input
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="Your email address"
+                                            className="w-full px-4 py-3 bg-black/30 border border-lime-400/30 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-lime-400/50"
+                                            disabled={isLoading}
+                                        />
+                                        {emailError && (
+                                            <p className="mt-1 text-red-500 text-sm">{emailError}</p>
+                                        )}
+                                    </div>
+                                    <button
+                                        onClick={handleCheckoutClick}
+                                        disabled={isLoading}
+                                        className="bg-lime-400 hover:bg-lime-500 text-black font-bold py-3 px-6 rounded-lg disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
+                                    >
+                                        {isLoading ? 'Processing...' : 'Get Protected'}
+                                    </button>
+                                </div>
                             </div>
                         </div>  
                     ))}

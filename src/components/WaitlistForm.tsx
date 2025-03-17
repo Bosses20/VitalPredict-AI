@@ -196,9 +196,9 @@ export default function WaitlistForm({ onClose, className = '', source = 'waitli
                         {...register('interests')}
                         className="sr-only peer"
                       />
-                      <div className="w-5 h-5 md:w-4 md:h-4 border border-white/30 rounded bg-white/5 peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-colors"></div>
+                      <div className="w-4 h-4 border border-white/30 rounded bg-white/5 peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-colors"></div>
                       <svg 
-                        className="absolute w-3 h-3 text-white left-1 top-1 opacity-0 peer-checked:opacity-100 pointer-events-none" 
+                        className="absolute w-2.5 h-2.5 text-white left-0.75 top-0.75 opacity-0 peer-checked:opacity-100 pointer-events-none" 
                         viewBox="0 0 24 24" 
                         fill="none" 
                         stroke="currentColor" 
@@ -209,7 +209,7 @@ export default function WaitlistForm({ onClose, className = '', source = 'waitli
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-sm md:text-base">{interest}</span>
+                    <span className="text-sm">{interest}</span>
                   </label>
                 ))}
               </div>
