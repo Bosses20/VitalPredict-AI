@@ -59,19 +59,20 @@ export default function Introduction() {
     useEffect(() => {
         if (!statsScrollRef.current || !isStatsInView || !autoScrollEnabled) return;
         
-        // Setup continuous animation for automatic scrolling
+        // Calculate card width and total width
         const cardWidth = 280 + 16; // card width + gap
         const totalWidth = cardWidth * stats.length;
         
-        // Create infinite loop animation
+        // Create infinite loop animation with proper timing
         statsControls.start({
             x: [-cardWidth, -(totalWidth + cardWidth)],
             transition: {
                 x: {
                     repeat: Infinity,
                     repeatType: "loop",
-                    duration: 15,
+                    duration: stats.length * 3, // Time based on number of cards (3 seconds per card)
                     ease: "linear",
+                    repeatDelay: 0.5, // Small delay between loops
                 }
             }
         });
@@ -102,8 +103,9 @@ export default function Introduction() {
                             x: {
                                 repeat: Infinity,
                                 repeatType: "loop",
-                                duration: 15,
+                                duration: stats.length * 3,
                                 ease: "linear",
+                                repeatDelay: 0.5,
                             }
                         }
                     });
@@ -113,10 +115,30 @@ export default function Introduction() {
             return resumeTimeout;
         };
         
+        // Reset animation when window is resized
+        const handleResize = () => {
+            if (autoScrollEnabled) {
+                statsControls.stop();
+                statsControls.start({
+                    x: [-cardWidth, -(totalWidth + cardWidth)],
+                    transition: {
+                        x: {
+                            repeat: Infinity,
+                            repeatType: "loop",
+                            duration: stats.length * 3,
+                            ease: "linear",
+                            repeatDelay: 0.5,
+                        }
+                    }
+                });
+            }
+        };
+        
         // Attach event listeners
         statsScrollRef.current.addEventListener('touchstart', handleManualInteraction);
         statsScrollRef.current.addEventListener('mousedown', handleManualInteraction);
         statsScrollRef.current.addEventListener('scroll', updateActiveIndex);
+        window.addEventListener('resize', handleResize);
         
         let resumeTimeout: NodeJS.Timeout;
         
@@ -129,6 +151,7 @@ export default function Introduction() {
                 statsScrollRef.current.removeEventListener('mousedown', handleManualInteraction);
                 statsScrollRef.current.removeEventListener('scroll', updateActiveIndex);
             }
+            window.removeEventListener('resize', handleResize);
         };
     }, [isStatsInView, autoScrollEnabled, activeStatIndex, stats.length, statsControls]);
     
@@ -244,20 +267,25 @@ export default function Introduction() {
                     <div className="md:hidden mt-8">
                         <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide smooth-scroll" ref={statsScrollRef}>
                             <motion.div 
-                                className="flex flex-nowrap gap-4 w-full"
+                                className="flex flex-nowrap gap-4 w-full pl-4 pr-16"
                                 animate={statsControls}
+                                whileHover={{ animationPlayState: "paused" }}
                             >
-                                {stats.map((stat, index) => (
+                                {/* Duplicate stats cards for infinite loop effect */}
+                                {[...stats, ...stats].map((stat, index) => (
                                     <motion.div 
                                         key={`stat-mobile-${index}`}
-                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-5 min-w-[280px] max-w-[280px] flex-shrink-0 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5 scroll-snap-card stat-card" data-index={index}
+                                        className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-3xl p-5 min-w-[280px] max-w-[280px] flex-shrink-0 shadow-xl shadow-black/20 backdrop-blur-sm border border-white/5 scroll-snap-card stat-card" data-index={index % stats.length}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={isStatsInView ? { opacity: 1, scale: 1 } : {}}
                                         transition={{ 
-                                            duration: 0.5, 
-                                            delay: 0.3 + index * 0.2,
-                                            type: "spring",
-                                            stiffness: 100
+                                            delay: 0.1 * (index % stats.length),
+                                            duration: 0.4,
+                                        }}
+                                        whileHover={{ 
+                                            scale: 1.02,
+                                            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.4)",
+                                            border: "1px solid rgba(255, 255, 255, 0.1)"
                                         }}
                                     >
                                         <div className="flex flex-col gap-1">
@@ -267,7 +295,7 @@ export default function Introduction() {
                                                 animate={isStatsInView ? { y: 0, opacity: 1 } : {}}
                                                 transition={{ 
                                                     duration: 0.5, 
-                                                    delay: 0.3 + index * 0.2
+                                                    delay: 0.3 + (index % stats.length) * 0.2
                                                 }}
                                             >
                                                 {stat.value}
@@ -278,7 +306,7 @@ export default function Introduction() {
                                                 animate={isStatsInView ? { y: 0, opacity: 1 } : {}}
                                                 transition={{ 
                                                     duration: 0.5, 
-                                                    delay: 0.4 + index * 0.2
+                                                    delay: 0.4 + (index % stats.length) * 0.2
                                                 }}
                                             >
                                                 {stat.title}
@@ -289,7 +317,7 @@ export default function Introduction() {
                                                 animate={isStatsInView ? { y: 0, opacity: 1 } : {}}
                                                 transition={{ 
                                                     duration: 0.5, 
-                                                    delay: 0.5 + index * 0.2
+                                                    delay: 0.5 + (index % stats.length) * 0.2
                                                 }}
                                             >
                                                 {stat.description}
