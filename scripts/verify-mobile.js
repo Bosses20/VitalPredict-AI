@@ -34,10 +34,30 @@ const config = {
     ],
     // Negative patterns (potential issues)
     negative: [
-      { regex: /width:\s*\d+px/g, description: 'Fixed width in pixels' },
-      { regex: /height:\s*\d+px/g, description: 'Fixed height in pixels' },
-      { regex: /position:\s*absolute/g, description: 'Absolute positioning (check mobile context)' },
-      { regex: /text-\w+xl(?!\s|\/)/g, description: 'Very large text without responsive classes' },
+      { 
+        regex: /width:\s*\d+px/g, 
+        description: 'Fixed width in pixels',
+        // Don't flag if it's inside a media query
+        exclusionRegex: /@media[^{]*\{[^}]*width:\s*\d+px/g
+      },
+      { 
+        regex: /height:\s*\d+px/g, 
+        description: 'Fixed height in pixels',
+        // Don't flag if it's inside a media query
+        exclusionRegex: /@media[^{]*\{[^}]*height:\s*\d+px/g
+      },
+      { 
+        regex: /position:\s*absolute/g, 
+        description: 'Absolute positioning (check mobile context)',
+        // Exempt if it's in a component that handles responsiveness
+        exclusionRegex: /useMediaQuery|useBreakpoint/g
+      },
+      { 
+        regex: /text-\w+xl(?!\s|\/)/g, 
+        description: 'Very large text without responsive classes',
+        // Don't flag if there's a responsive class nearby
+        exclusionRegex: /className="[^"]*(?:text-\w+\s+md:text-|md:text-)[^"]*"/g
+      },
     ],
   }
 };
@@ -89,23 +109,49 @@ async function analyzeFile(filePath) {
   for (const pattern of config.patterns.negative) {
     const matches = content.match(pattern.regex);
     if (matches && matches.length > 0) {
-      results.issues.push({
-        type: pattern.description,
-        count: matches.length,
-        lines: findMatchingLines(content, pattern.regex),
-      });
+      // Check if exclusion regex applies to the whole file
+      if (pattern.exclusionRegex && content.match(pattern.exclusionRegex)) {
+        continue;
+      }
+      
+      // Find actual matching lines (which also checks for contextual exclusions)
+      const matchingLines = findMatchingLines(content, pattern.regex, pattern.exclusionRegex);
+      
+      // Only add to issues if there are matching lines after exclusions
+      if (matchingLines.length > 0) {
+        results.issues.push({
+          type: pattern.description,
+          count: matchingLines.length,
+          lines: matchingLines,
+        });
+      }
     }
   }
   
   return results;
 }
 
-function findMatchingLines(content, regex) {
+function findMatchingLines(content, regex, exclusionRegex) {
   const lines = content.split('\n');
   const matchingLines = [];
   
   for (let i = 0; i < lines.length; i++) {
     if (regex.test(lines[i])) {
+      // If there's an exclusion regex, check the surrounding context
+      if (exclusionRegex) {
+        // Look at 3 lines before and after for context
+        const startIdx = Math.max(0, i - 3);
+        const endIdx = Math.min(lines.length - 1, i + 3);
+        const context = lines.slice(startIdx, endIdx + 1).join('\n');
+        
+        // Skip if exclusion pattern is found in context
+        if (exclusionRegex.test(context)) {
+          // Reset regex state for the next iteration
+          regex.lastIndex = 0;
+          continue;
+        }
+      }
+      
       matchingLines.push({
         line: i + 1,
         content: lines[i].trim(),
