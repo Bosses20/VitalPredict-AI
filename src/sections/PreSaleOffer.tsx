@@ -3,12 +3,10 @@
 import { useEffect, useState, useCallback, memo } from "react";
 import Countdown from "react-countdown";
 import { motion } from "framer-motion";
-import Button from "@/components/Button";
 import PurchaseButton from "@/components/PurchaseButton";
 import TrustBadges from "@/components/TrustBadges";
 import Tag from "@/components/Tag";
 import { AvatarCircles } from "@/registry/magicui/avatar-circles";
-import toast, { Toaster } from "react-hot-toast";
 
 // Define the missing CountdownRenderProps type
 interface CountdownRenderProps {
@@ -94,8 +92,11 @@ UserAvatars.displayName = 'UserAvatars';
 
 export default function PreSaleOffer() {
     const [endTime, setEndTime] = useState<number | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isClaimed, setIsClaimed] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isSubmitting, setIsSubmitting] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [error, setError] = useState<string | null>(null);
     const totalSpots = 100;
     const claimedCount = 82; // Update this dynamically if needed
@@ -202,7 +203,7 @@ export default function PreSaleOffer() {
                             
                             {/* Right Column: Value Proposition */}
                             <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-white mb-2">Why It's Worth It:</h3>
+                                <h3 className="text-lg font-semibold text-white mb-2">Why It&apos;s Worth It:</h3>
                                 <div className="space-y-3 text-sm">
                                     <div className="flex items-start gap-2">
                                         <svg className="w-4 h-4 text-lime-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -265,7 +266,6 @@ export default function PreSaleOffer() {
                     </div>
                 </motion.div>
             </div>
-            <Toaster position="bottom-center" />
         </section>
     );
 }

@@ -2,8 +2,7 @@
 
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
-import Tag from "@/components/Tag";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 interface TestimonialProps {
     name: string;
