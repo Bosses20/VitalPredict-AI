@@ -85,7 +85,7 @@ export const metadata: Metadata = {
       google: 'google-site-verification-code', // Replace with actual verification code when available
     },
     alternates: {
-      canonical: 'https://vitalpredict.dev',
+      canonical: undefined, // Remove canonical URL from root layout
     },
     applicationName: 'VitalPredict AI',
     viewport: {

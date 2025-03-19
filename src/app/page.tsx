@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Navbar from "@/sections/Navbar";
 import Hero from "@/sections/Hero";
 import LogoTicker from "@/sections/LogoTicker";
@@ -9,6 +10,13 @@ import PreSaleOffer from "@/sections/PreSaleOffer";
 import Faqs from "@/sections/Faqs";
 import CallToAction from "@/sections/CallToAction";
 import Footer from "@/sections/Footer";
+import { generateCanonicalUrl } from "@/lib/canonical";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: generateCanonicalUrl(),
+  },
+};
 
 export default function Home() {
     return (

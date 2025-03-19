@@ -11,6 +11,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 export async function middleware(request: NextRequest) {
+  // Check if it's a known public page that should never be redirected
+  const isPublicPage = 
+    request.nextUrl.pathname === '/' ||
+    request.nextUrl.pathname === '/sitemap.xml' ||
+    request.nextUrl.pathname === '/robots.txt' ||
+    request.nextUrl.pathname === '/how-it-works' ||
+    request.nextUrl.pathname === '/privacy-policy' ||
+    request.nextUrl.pathname === '/terms' ||
+    request.nextUrl.pathname === '/thank-you';
+  
+  // Don't process redirects for public pages to avoid Google indexing issues
+  if (isPublicPage) {
+    return NextResponse.next();
+  }
+  
   // Create a Supabase client for the middleware
   const supabase = createMiddlewareClient({ req: request, res: NextResponse.next() });
   
@@ -25,7 +40,7 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = request.nextUrl.pathname.startsWith('/auth');
   const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard');
   
-  // Skip auth check for public routes
+  // Skip auth check for public routes that aren't explicitly listed above
   if (!isAdminRoute && !isDashboardRoute && !isApiRoute) {
     return NextResponse.next();
   }
