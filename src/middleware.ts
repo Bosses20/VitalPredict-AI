@@ -17,6 +17,7 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname === '/sitemap.xml' ||
     request.nextUrl.pathname === '/robots.txt' ||
     request.nextUrl.pathname === '/how-it-works' ||
+    request.nextUrl.pathname === '/privacy' ||
     request.nextUrl.pathname === '/privacy-policy' ||
     request.nextUrl.pathname === '/terms' ||
     request.nextUrl.pathname === '/thank-you';

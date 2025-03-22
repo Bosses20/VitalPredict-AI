@@ -1,9 +1,19 @@
 "use client";
 
+import { Metadata } from "next";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import logoImage from "@/assets/images/logo.svg";
+import { generateCanonicalUrl } from "@/lib/canonical";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | VitalPredict AI",
+  description: "VitalPredict AI's privacy policy explains how we collect, use, and protect your personal information.",
+  alternates: {
+    canonical: generateCanonicalUrl({ path: '/privacy' }),
+  },
+};
 
 export default function PrivacyPolicy() {
   const currentYear = new Date().getFullYear();
