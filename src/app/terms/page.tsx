@@ -1,19 +1,11 @@
 "use client";
 
-import { Metadata } from "next";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import logoImage from "@/assets/images/logo.svg";
-import { generateCanonicalUrl } from "@/lib/canonical";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | VitalPredict AI",
-  description: "VitalPredict AI's terms of service outline the rules, guidelines, and legal terms for using our platform and products.",
-  alternates: {
-    canonical: generateCanonicalUrl({ path: '/terms' }),
-  },
-};
+// Moved metadata to layout.tsx or directly in app/page.tsx to avoid conflicts with "use client"
 
 export default function TermsOfService() {
   const currentYear = new Date().getFullYear();
