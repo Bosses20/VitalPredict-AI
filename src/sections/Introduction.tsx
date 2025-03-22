@@ -254,12 +254,7 @@ export default function Introduction() {
                             animate={isTitleInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6 }}
                         >
-                            <span className="text-red-500">✕</span> 
-                            <span className="text-white/80">Families live </span>
-                            <span className="text-teal-400 font-semibold">in</span>
-                            <span className="text-white/80"> constant fear </span>
-                            <span className="text-teal-400 font-semibold">of</span>
-                            <span className="text-white/80"> sudden collapses.</span>
+                            {/* Removed duplicate text line that was causing confusion */}
                         </motion.div>
                     </div>
                     
