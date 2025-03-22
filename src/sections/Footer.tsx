@@ -10,7 +10,8 @@ const footerLinks = [
     { href: "/#how-it-works", label: "How It Works" },
     { href: "/#testimonials", label: "Reviews" },
     { href: "/#faqs", label: "FAQs" },
-    { href: "/privacy", label: "Privacy Policy", isExternal: true }
+    { href: "/privacy", label: "Privacy Policy", isExternal: true },
+    { href: "/terms", label: "Terms of Service", isExternal: true }
 ];
 
 const LockIcon = () => (
@@ -124,7 +125,7 @@ export default function Footer() {
                         </div>
 
                         <p className="text-sm text-white/40">
-                            © {currentYear} VitalPredict AI. All rights reserved.
+                            &copy; {currentYear} VitalPredict AI. All rights reserved.
                         </p>
                     </motion.div>
                 </motion.div>
