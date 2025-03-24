@@ -522,7 +522,7 @@ export default function HowItWorksDetailed() {
                   </p>
                   <div className="flex justify-center">
                     <Link 
-                      href="/#early-access" 
+                      href="/early-access" 
                       className="bg-lime-500 hover:bg-lime-400 transition-colors px-8 py-3 rounded-full font-medium text-black text-lg flex items-center"
                     >
                       Join the Waitlist

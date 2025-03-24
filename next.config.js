@@ -3,6 +3,41 @@ const nextConfig = {
   output: 'standalone',
   // Handle trailing slashes consistently
   trailingSlash: false,
+  // Add redirects for hash fragments
+  async redirects() {
+    return [
+      {
+        source: '/#features',
+        destination: '/features',
+        permanent: true,
+      },
+      {
+        source: '/#how-it-works',
+        destination: '/how-it-works',
+        permanent: true,
+      },
+      {
+        source: '/#testimonials',
+        destination: '/testimonials',
+        permanent: true,
+      },
+      {
+        source: '/#faqs',
+        destination: '/faqs',
+        permanent: true,
+      },
+      {
+        source: '/#early-access',
+        destination: '/early-access',
+        permanent: true,
+      },
+      {
+        source: '/#hero',
+        destination: '/',
+        permanent: true,
+      }
+    ];
+  },
   images: {
     remotePatterns: [
       {

@@ -6,7 +6,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Define the main routes of the site
   const routes = [
     '',
+    '/features',
     '/how-it-works',
+    '/how-it-works/guide',
+    '/testimonials',
+    '/faqs',
+    '/early-access',
     '/privacy',
     '/terms',
     '/thank-you'

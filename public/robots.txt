@@ -1,0 +1,6 @@
+# robots.txt for vitalpredict.dev
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://vitalpredict.dev/sitemap.xml

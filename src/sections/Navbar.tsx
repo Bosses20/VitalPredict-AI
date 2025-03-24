@@ -18,18 +18,18 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
-    { label: "Home", href: "/#hero" },
-    { label: "Features", href: "/#features" },
+    { label: "Home", href: "/" },
+    { label: "Features", href: "/features" },
     { 
         label: "How", 
-        href: "/#how-it-works",
+        href: "/how-it-works",
         dropdown: [
-            { label: "Overview", href: "/#how-it-works" },
-            { label: "Detailed Guide", href: "/how-it-works" }
+            { label: "Overview", href: "/how-it-works" },
+            { label: "Detailed Guide", href: "/how-it-works/guide" }
         ]
     },
-    { label: "Reviews", href: "/#testimonials" },
-    { label: "FAQs", href: "/#faqs" },
+    { label: "Reviews", href: "/testimonials" },
+    { label: "FAQs", href: "/faqs" },
 ];
 
 export default function Navbar() {
@@ -127,7 +127,7 @@ export default function Navbar() {
                 <div className="bg-black/30 backdrop-blur-xl rounded-full border border-white/10 py-2 px-4 flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex-shrink-0">
-                        <Link href="/#hero">
+                        <Link href="/">
                             <Image src={LogoImage} alt="VitalPredict.ai logo" className="h-9 w-auto transition-transform duration-[250ms] hover:scale-105"/> 
                         </Link>
                     </div>
@@ -255,7 +255,7 @@ export default function Navbar() {
                     >
                         <div className="max-w-md mx-auto bg-neutral-900/80 backdrop-blur-md rounded-2xl p-6 border border-white/10">
                             <div className="flex justify-between items-center mb-6">
-                                <Link href="/#hero" onClick={() => setIsOpen(false)}>
+                                <Link href="/" onClick={() => setIsOpen(false)}>
                                     <Image src={LogoImage} alt="VitalPredict.ai logo" className="h-8 w-auto object-contain"/> 
                                 </Link>
                                 <button 

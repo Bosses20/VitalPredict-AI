@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const footerLinks = [
-    { href: "/#features", label: "Features" },
-    { href: "/#how-it-works", label: "How It Works" },
-    { href: "/#testimonials", label: "Reviews" },
-    { href: "/#faqs", label: "FAQs" },
+    { href: "/features", label: "Features" },
+    { href: "/how-it-works", label: "How It Works" },
+    { href: "/testimonials", label: "Reviews" },
+    { href: "/faqs", label: "FAQs" },
     { href: "/privacy", label: "Privacy Policy", isExternal: true },
     { href: "/terms", label: "Terms of Service", isExternal: true }
 ];
