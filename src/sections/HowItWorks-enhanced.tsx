@@ -237,7 +237,7 @@ export default function HowItWorks() {
                     transition={{ duration: 0.5, delay: 0.9 }}
                 >
                     <p className="text-white/60 mb-4">Still skeptical?</p>
-                    <ActionButton href="#early-access">
+                    <ActionButton href="/early-access">
                         See how it works <span className="ml-1">→</span>
                     </ActionButton>
                 </motion.div>

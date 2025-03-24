@@ -373,7 +373,7 @@ export default function Hero() {
                         }}
                     >
                         <a 
-                            href="#pre-sale-offer" 
+                            href="/early-access" 
                             className="inline-flex items-center text-lime-400 hover:text-lime-300 font-medium transition-colors duration-200 text-sm md:text-base"
                         >
                             <span>Check out our limited time offer - 67% off for early access</span>
