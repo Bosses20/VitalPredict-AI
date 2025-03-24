@@ -32,6 +32,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/#pre-sale-offer',
+        destination: '/early-access',
+        permanent: true,
+      },
+      {
         source: '/#hero',
         destination: '/',
         permanent: true,
