@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -107,6 +108,7 @@ export default function RootLayout({
                 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
                 <meta name="theme-color" content="#111827" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=true" />
+                <GoogleAnalytics />
             </head>
             <body className={`${inter.variable} font-sans bg-neutral-950 text-white antialiased overflow-x-hidden`}>
                 <AnalyticsProvider>

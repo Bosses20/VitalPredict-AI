@@ -7,44 +7,45 @@ type EventProps = {
   label?: string;
   value?: number;
   nonInteraction?: boolean;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined;
 };
 
+// GA4 Measurement ID
+const GA_MEASUREMENT_ID = 'G-6K59GJ6KTC';
+
+// Define the Window interface extension for gtag
+interface GTagWindow extends Window {
+  dataLayer: Array<unknown>;
+  gtag: (...args: unknown[]) => void;
+}
+
 // Check if window and Google Analytics objects are available (client-side only)
-const isGAAvailable = () => {
+const isGAAvailable = (): boolean => {
   return typeof window !== 'undefined' && 
-         typeof window.gtag !== 'undefined';
+         typeof (window as GTagWindow).gtag !== 'undefined';
 };
 
 // Initialize Google Analytics
 export const initGA = (): boolean => {
   if (isGAAvailable()) return true; // Already initialized
   
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-  if (!gaId) {
-    console.warn('Google Analytics ID not found in environment variables');
-    return false;
-  }
-  
   try {
     // Add Google Analytics script
     const script = document.createElement('script');
     script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
     document.head.appendChild(script);
     
     // Initialize gtag
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args);
+    (window as GTagWindow).dataLayer = (window as GTagWindow).dataLayer || [];
+    function gtag(...args: unknown[]) {
+      (window as GTagWindow).dataLayer.push(args);
     }
     gtag('js', new Date());
-    gtag('config', gaId, {
-      page_path: window.location.pathname,
-    });
+    gtag('config', GA_MEASUREMENT_ID);
     
     // Make gtag globally available
-    window.gtag = gtag;
+    (window as GTagWindow).gtag = gtag;
     
     return true;
   } catch (error) {
@@ -58,7 +59,7 @@ export const pageview = (url: string): void => {
   if (!isGAAvailable()) return;
   
   try {
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID as string, {
+    (window as GTagWindow).gtag('config', GA_MEASUREMENT_ID, {
       page_path: url,
     });
   } catch (error) {
@@ -73,7 +74,7 @@ export const event = (props: EventProps): void => {
   try {
     const { action, category, label, value, nonInteraction = false, ...rest } = props;
     
-    window.gtag('event', action, {
+    (window as GTagWindow).gtag('event', action, {
       event_category: category,
       event_label: label,
       value: value,
@@ -90,7 +91,7 @@ export const exception = (description: string, fatal = false): void => {
   if (!isGAAvailable()) return;
   
   try {
-    window.gtag('event', 'exception', {
+    (window as GTagWindow).gtag('event', 'exception', {
       description,
       fatal
     });
@@ -102,11 +103,11 @@ export const exception = (description: string, fatal = false): void => {
 // Enhanced ecommerce tracking
 export const ecommerce = {
   // Track a product view
-  viewProduct: (product: any): void => {
+  viewProduct: (product: { [key: string]: string | number | boolean | undefined }): void => {
     if (!isGAAvailable()) return;
     
     try {
-      window.gtag('event', 'view_item', {
+      (window as GTagWindow).gtag('event', 'view_item', {
         items: [product]
       });
     } catch (error) {
@@ -115,11 +116,11 @@ export const ecommerce = {
   },
   
   // Track adding a product to cart
-  addToCart: (product: any): void => {
+  addToCart: (product: { [key: string]: string | number | boolean | undefined }): void => {
     if (!isGAAvailable()) return;
     
     try {
-      window.gtag('event', 'add_to_cart', {
+      (window as GTagWindow).gtag('event', 'add_to_cart', {
         items: [product]
       });
     } catch (error) {
@@ -128,11 +129,11 @@ export const ecommerce = {
   },
   
   // Track beginning checkout
-  beginCheckout: (products: any[]): void => {
+  beginCheckout: (products: { [key: string]: string | number | boolean | undefined }[]): void => {
     if (!isGAAvailable()) return;
     
     try {
-      window.gtag('event', 'begin_checkout', {
+      (window as GTagWindow).gtag('event', 'begin_checkout', {
         items: products
       });
     } catch (error) {
@@ -141,11 +142,11 @@ export const ecommerce = {
   },
   
   // Track purchase completed
-  purchase: (transaction: any): void => {
+  purchase: (transaction: { [key: string]: string | number | boolean | undefined }): void => {
     if (!isGAAvailable()) return;
     
     try {
-      window.gtag('event', 'purchase', transaction);
+      (window as GTagWindow).gtag('event', 'purchase', transaction);
     } catch (error) {
       console.error('Failed to track purchase:', error);
     }
@@ -162,7 +163,7 @@ export const trackFormView = (formName: string, source: string): void => {
   });
 };
 
-export const trackFormSubmission = (formName: string, status: 'success' | 'failure', data: any = {}): void => {
+export const trackFormSubmission = (formName: string, status: 'success' | 'failure', data: { [key: string]: string | number | boolean | undefined } = {}): void => {
   event({
     action: 'form_submission',
     category: 'Forms',
